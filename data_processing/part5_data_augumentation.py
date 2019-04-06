@@ -85,7 +85,9 @@ for key,option in settings.items():
         print ("Reprocessing idx bert")
         df_new['A_idx_bert'] = df_new.apply(lambda x: get_vector_index(x.A, x["A-offset"],x['token_map_bert']), axis=1)
         df_new['B_idx_bert'] = df_new.apply(lambda x: get_vector_index(x.B, x["B-offset"],x['token_map_bert']), axis=1)
-  
+
+        df_new['A_idx_bert_torch'] = df_new.apply(lambda x: get_vector_index(x.A, x["A-offset"],x['token_map_bert_torch']), axis=1)
+        df_new['B_idx_bert_torch'] = df_new.apply(lambda x: get_vector_index(x.B, x["B-offset"],x['token_map_bert_torch']), axis=1)  
 
         print ("Reprocessing vector bert")    
         df_new['A_vector_bert_1024'] = df_new.apply(lambda x: x["vector_bert_1024"][x['A_idx_bert'],:], axis=1)

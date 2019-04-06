@@ -11,14 +11,19 @@ import sys
 sys.path.append('..')
 from utils.get_settings import parse
 from feature_function import *
-
+import torch
+from pytorch_pretrained_bert import BertTokenizer, BertModel
 settings = parse("../utils")
+tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
+
 
 for key,option in settings.items():
     df = pd.read_pickle(option["pickle_path"])
+    df["bert_tokens_torch"] = [["CLS"]+tokenizer.tokenize(s)+["SEP"] for s in df.Text]
     
     print ("Processing token map and sentence map")
     df['token_map_bert'] = df.apply(lambda x: get_token_map(x.Text, x.bert_tokens), axis=1)
+    df['token_map_bert_torch'] = df.apply(lambda x: get_token_map(x.Text, x.bert_tokens_torch), axis=1)
     df['sentence_map_bert'] = df.Text.map(get_sentence_map)
     
     print ("Processing dist bert")
@@ -34,6 +39,10 @@ for key,option in settings.items():
     df['A_idx_bert'] = df.apply(lambda x: get_vector_index(x.A, x["A-offset"],x['token_map_bert']), axis=1)
     df['B_idx_bert'] = df.apply(lambda x: get_vector_index(x.B, x["B-offset"],x['token_map_bert']), axis=1)
     df['pron_idx_bert'] = df.apply(lambda x: get_vector_index(x.Pronoun, x["Pronoun-offset"],x['token_map_bert']), axis=1)
+
+    df['A_idx_bert_torch'] = df.apply(lambda x: get_vector_index(x.A, x["A-offset"],x['token_map_bert_torch']), axis=1)
+    df['B_idx_bert_torch'] = df.apply(lambda x: get_vector_index(x.B, x["B-offset"],x['token_map_bert_torch']), axis=1)
+    df['pron_idx_bert_torch'] = df.apply(lambda x: get_vector_index(x.Pronoun, x["Pronoun-offset"],x['token_map_bert_torch']), axis=1)
 
     print ("Processing vector bert")    
     df['A_vector_bert_1024'] = df.apply(lambda x: x["vector_bert_1024"][x['A_idx_bert'],:], axis=1)

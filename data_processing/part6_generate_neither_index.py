@@ -54,9 +54,11 @@ def get_name_vector_index(name_list,token_map):
 for key,option in settings.items():
     df = pd.read_pickle(option["pickle_path"])
     
+    df['name_idx_bert_torch'] = df.apply(lambda x: get_name_vector_index(x["name_list"],x['token_map_bert_torch']), axis=1)
     df['name_idx_bert'] = df.apply(lambda x: get_name_vector_index(x["name_list"],x['token_map_bert']), axis=1)
     df['neither_list']  =  df.apply(lambda x:remove_AB(x['name_list'],x["A"],x["B"]),axis = 1)
     df['neither_idx_bert'] = df.apply(lambda x: get_name_vector_index(x["neither_list"],x['token_map_bert']), axis=1)
+    df['neither_idx_bert_torch'] = df.apply(lambda x: get_name_vector_index(x["neither_list"],x['token_map_bert_torch']), axis=1)
     
     df['neither_idx_bert'] = df.apply(lambda x: del_idx(x["neither_idx_bert"],x['A_idx_bert']), axis=1)
     df['neither_idx_bert'] = df.apply(lambda x: del_idx(x["neither_idx_bert"],x['B_idx_bert']), axis=1)
@@ -65,6 +67,14 @@ for key,option in settings.items():
     df['name_idx_bert'] = df.apply(lambda x: del_idx(x["name_idx_bert"],x['A_idx_bert']), axis=1)
     df['name_idx_bert'] = df.apply(lambda x: del_idx(x["name_idx_bert"],x['B_idx_bert']), axis=1)
     df['name_idx_bert'] = df.apply(lambda x: del_idx(x["name_idx_bert"],x['pron_idx_bert']), axis=1)
+
+    df['neither_idx_bert_torch'] = df.apply(lambda x: del_idx(x["neither_idx_bert_torch"],x['A_idx_bert_torch']), axis=1)
+    df['neither_idx_bert_torch'] = df.apply(lambda x: del_idx(x["neither_idx_bert_torch"],x['B_idx_bert_torch']), axis=1)
+    df['neither_idx_bert_torch'] = df.apply(lambda x: del_idx(x["neither_idx_bert_torch"],x['pron_idx_bert_torch']), axis=1)
+
+    df['name_idx_bert_torch'] = df.apply(lambda x: del_idx(x["name_idx_bert_torch"],x['A_idx_bert_torch']), axis=1)
+    df['name_idx_bert_torch'] = df.apply(lambda x: del_idx(x["name_idx_bert_torch"],x['B_idx_bert_torch']), axis=1)
+    df['name_idx_bert_torch'] = df.apply(lambda x: del_idx(x["name_idx_bert_torch"],x['pron_idx_bert_torch']), axis=1)
     
     df['name_vector_bert_1024'] = df.apply(lambda x: x["vector_bert_1024"][x['name_idx_bert'],:], axis=1)
     df['neither_vector_bert_1024'] = df.apply(lambda x: x["vector_bert_1024"][x['neither_idx_bert'],:], axis=1)
@@ -75,10 +85,11 @@ for key,option in settings.items():
     df.to_pickle(option["pickle_path"])
     if key != 'stage2':
         df = pd.read_pickle(option["pickle_path_augument"])
-        
+        df['name_idx_bert_torch'] = df.apply(lambda x: get_name_vector_index(x["name_list"],x['token_map_bert_torch']), axis=1)        
         df['name_idx_bert'] = df.apply(lambda x: get_name_vector_index(x["name_list"],x['token_map_bert']), axis=1)
         df['neither_list']  =  df.apply(lambda x:remove_AB(x['name_list'],x["A"],x["B"]),axis = 1)
         df['neither_idx_bert'] = df.apply(lambda x: get_name_vector_index(x["neither_list"],x['token_map_bert']), axis=1)
+        df['neither_idx_bert_torch'] = df.apply(lambda x: get_name_vector_index(x["neither_list"],x['token_map_bert_torch']), axis=1)
     
         df['neither_idx_bert'] = df.apply(lambda x: del_idx(x["neither_idx_bert"],x['A_idx_bert']), axis=1)
         df['neither_idx_bert'] = df.apply(lambda x: del_idx(x["neither_idx_bert"],x['B_idx_bert']), axis=1)
@@ -87,6 +98,15 @@ for key,option in settings.items():
         df['name_idx_bert'] = df.apply(lambda x: del_idx(x["name_idx_bert"],x['A_idx_bert']), axis=1)
         df['name_idx_bert'] = df.apply(lambda x: del_idx(x["name_idx_bert"],x['B_idx_bert']), axis=1)
         df['name_idx_bert'] = df.apply(lambda x: del_idx(x["name_idx_bert"],x['pron_idx_bert']), axis=1)
+
+
+        df['neither_idx_bert_torch'] = df.apply(lambda x: del_idx(x["neither_idx_bert_torch"],x['A_idx_bert_torch']), axis=1)
+        df['neither_idx_bert_torch'] = df.apply(lambda x: del_idx(x["neither_idx_bert_torch"],x['B_idx_bert_torch']), axis=1)
+        df['neither_idx_bert_torch'] = df.apply(lambda x: del_idx(x["neither_idx_bert_torch"],x['pron_idx_bert_torch']), axis=1)
+
+        df['name_idx_bert_torch'] = df.apply(lambda x: del_idx(x["name_idx_bert_torch"],x['A_idx_bert_torch']), axis=1)
+        df['name_idx_bert_torch'] = df.apply(lambda x: del_idx(x["name_idx_bert_torch"],x['B_idx_bert_torch']), axis=1)
+        df['name_idx_bert_torch'] = df.apply(lambda x: del_idx(x["name_idx_bert_torch"],x['pron_idx_bert_torch']), axis=1)
     
         df['name_vector_bert_1024'] = df.apply(lambda x: x["vector_bert_1024"][x['name_idx_bert'],:], axis=1)
         df['neither_vector_bert_1024'] = df.apply(lambda x: x["vector_bert_1024"][x['neither_idx_bert'],:], axis=1)
