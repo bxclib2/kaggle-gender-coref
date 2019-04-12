@@ -19,7 +19,7 @@ tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
 
 for key,option in settings.items():
     df = pd.read_pickle(option["pickle_path"])
-    df["bert_tokens_torch"] = [["CLS"]+tokenizer.tokenize(s)+["SEP"] for s in df.Text]
+    df["bert_tokens_torch"] = [["[CLS]"]+tokenizer.tokenize(s)+["[SEP]"] for s in df.Text]
     
     print ("Processing token map and sentence map")
     df['token_map_bert'] = df.apply(lambda x: get_token_map(x.Text, x.bert_tokens), axis=1)
